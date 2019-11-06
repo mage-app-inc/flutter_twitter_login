@@ -83,10 +83,27 @@
   result(nil);
 }
 
-- (BOOL)application:(UIApplication *)app
+- (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
-            options:(NSDictionary<NSString *, id> *)options {
-  return [[Twitter sharedInstance] application:app openURL:url options:options];
+            options: (NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
+  BOOL handled = [[Twitter sharedInstance]
+            application:application
+                openURL:url
+      sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+             annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+  return handled;
+}
+
+- (BOOL)application:(UIApplication *)application
+              openURL:(NSURL *)url
+    sourceApplication:(NSString *)sourceApplication
+           annotation:(id)annotation {
+  BOOL handled =
+      [[Twitter sharedInstance] application:application
+                                    openURL:url
+                          sourceApplication:sourceApplication
+                                 annotation:annotation];
+  return handled;
 }
 
 @end
